@@ -247,26 +247,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        
-        self.pushButton.clicked.connect(self.getFile)
-        self.actionOpen_csv_file.triggered.connect(self.getFile)
-
-
-        def getFile(self):
-            self.filename = QFileDialog.getOpenFileName(filter = "csv (*.csv)")[0]
-            print("File :", self.filename)
-            self.readData()
-        
-        def readData(self):
-            import os
-            base_name = os.path.basename(self.filename)
-            self.Title = os.path.splitext(base_name)[0]
-            print('FILE',self.Title )
-            self.df = pd.read_csv(self.filename,encoding = 'utf-8').fillna(0)
-            self.Update(self.themes[0]) # lets 0th theme be the default : bmh
-        
-
-
+   
 
 
 
