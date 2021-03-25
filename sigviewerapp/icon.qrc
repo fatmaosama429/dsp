@@ -1,0 +1,27 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/color.png</file>
+    <file>icons/change.png</file>
+    <file>icons/add.png</file>
+    <file>icons/channels.png</file>
+    <file>icons/close.png</file>
+    <file>icons/copy.png</file>
+    <file>icons/delete.png</file>
+    <file>icons/edit.png</file>
+    <file>icons/exit.png</file>
+    <file>icons/favourite.png</file>
+    <file>icons/file.png</file>
+    <file>icons/goto.png</file>
+    <file>icons/info.png</file>
+    <file>icons/new event.png</file>
+    <file>icons/open file.png.ico</file>
+    <file>icons/redo.png</file>
+    <file>icons/save.png</file>
+    <file>icons/scroll.png</file>
+    <file>icons/to all channels.png</file>
+    <file>icons/undo.png</file>
+    <file>icons/view.png</file>
+    <file>icons/zoom out.png</file>
+    <file>icons/zoomin.png</file>
+  </qresource>
+</RCC>
