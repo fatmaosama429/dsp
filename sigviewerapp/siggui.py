@@ -12,6 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMainWindow
+from PyQt5.QtGui import QIcon
 
 
 
@@ -406,4 +407,6 @@ if __name__ == "__main__":
     ui = Ui_mainWindow()
     ui.setupUi(mainWindow)
     mainWindow.show()
+    mainWindow.setWindowTitle("Sigviewer")
+    mainWindow.setWindowIcon(QIcon("icon.png"))
     sys.exit(app.exec_())
