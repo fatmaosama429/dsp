@@ -16,10 +16,23 @@ class Sheet(QMainWindow,From_Main):
         super(Sheet, self).__init__()
         QMainWindow.__init__(self)
         self.setupUi(self)
+        self.create_MenuBar()
         self.ToolBar()
         self.sc =myCanvas()
         self.l=QVBoxLayout(self.frame)
         self.l.addWidget(self.sc)
+
+    def create_MenuBar(self):
+        menuBar = self.menuBar()
+        self.setMenuBar(menuBar)
+        
+        file_menu = menuBar.addMenu('file')
+        open_action = file_menu.addAction('open')
+        plot_action = file_menu.addAction('plot')
+        file_menu.addAction('Quit',self.close)
+        
+        open_action.triggered.connect(self.open_sheet)
+        plot_action.triggered.connect(self.Plot)
 
     def ToolBar(self):
         AddFile = QAction(QIcon('images.png'),'Add File',self)
