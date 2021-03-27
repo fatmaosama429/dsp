@@ -1,6 +1,10 @@
 import csv
 import os
 import sys
+from PyQt5.uic.properties import QtCore
+from PyQt5 import QtCore
+import numpy as np
+import pyqtgraph as pg 
 from os.path import dirname, realpath,join
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow,QVBoxLayout,QAction,QFileDialog
@@ -21,10 +25,12 @@ class mainwind(QMainWindow,From_Main):
         self.setupUi(self)
         self.ToolBar()
         self.create_MenuBar()
-        self.sc =myCanvas()
+        self.sc =pg.PlotWidget()
+        self.timer = QtCore.QTimer()
         self.l=QVBoxLayout(self.graphicsView)
         self.l.addWidget(self.sc)
-    
+        
+
     def create_MenuBar(self):
         menuBar = self.menuBar()
         self.setMenuBar(menuBar)
@@ -244,26 +250,32 @@ class mainwind(QMainWindow,From_Main):
             printer.setOutputFileName(fn)
             self.graphicsview.document().print_(printer)
 
+    def Plot(self):
+        self.sc.plot(self.x1[: self.l1], self.y1[: self.l1])
+        self.l1 +=10
+        if self.l1 > len(self.x1):
+            self.l1 = 10
+        
+
+
     def open_sheet(self):
         path = QFileDialog.getOpenFileName(self, "Open", "", "CSV Files (*.csv);;All Files (*)")
         if path[0]!='':
             self.FileN=path[0]
-        self.Plot()
-
-    def Plot(self):
-        f=self.FileN
+        self.timer.start()
+        self.l1= 10
+        data=np.genfromtxt(r"C:\Users\Shady\OneDrive\Desktop\karin\3rd year 2nd term\DSP\signal view project\task1\dsp\ecg1 (1).csv", delimiter = ' ')
+        x1=data[: , 0]   
+        y1 =data[:,1]     
         #index = int(self.lineEdit.text())
-        x= []
-        y=[]
-        with open(f, newline = '') as csv_file:
-            my_file = csv.reader(csv_file, delimiter = ',')
-            for row in my_file:
-                x.append(str(row[0]))
-                y.append(str(row[1]))
-        self.sc.plot(x, y)
-        
+        self.x1= list(x1)
+        self.y1= list(y1)
+        self.timer.setInterval(10)
+        self.timer.timeout.connect(lambda: self.Plot())
+        self.timer.start()
+#        self.Plot()
 
-
+    
 
 class myCanvas(FigureCanvas):
     def __init__(self):
