@@ -9,8 +9,8 @@ from os.path import dirname, realpath,join
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow,QVBoxLayout,QAction,QFileDialog
 from PyQt5.uic import  loadUiType
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
+# from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+# from matplotlib.figure import Figure
 from PyQt5.QtWidgets import QMenu
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog, QPrintPreviewDialog
 from PyQt5.QtCore import QAbstractEventDispatcher, QFileInfo
@@ -261,10 +261,10 @@ class mainwind(QMainWindow,From_Main):
     def open_sheet(self):
         path = QFileDialog.getOpenFileName(self, "Open", "", "CSV Files (*.csv);;All Files (*)")
         if path[0]!='':
-            self.FileN=path[0]
+            path_a=self.FileN=path[0]
         self.timer.start()
         self.l1= 10
-        data=np.genfromtxt(r"C:\Users\Shady\OneDrive\Desktop\karin\3rd year 2nd term\DSP\signal view project\task1\dsp\ecg1 (1).csv", delimiter = ' ')
+        data=np.genfromtxt(path_a, delimiter = ' ')
         x1=data[: , 0]   
         y1 =data[:,1]     
         #index = int(self.lineEdit.text())
@@ -277,18 +277,18 @@ class mainwind(QMainWindow,From_Main):
 
     
 
-class myCanvas(FigureCanvas):
-    def __init__(self):
-        self.fig=Figure()
-        FigureCanvas.__init__(self,self.fig)
+# class myCanvas(FigureCanvas):
+#     def __init__(self):
+#         self.fig=Figure()
+#         FigureCanvas.__init__(self,self.fig)
 
-    def plot(self,xarray,yarray):
-        self.fig.clear()
-        self.ax= self.fig.add_subplot(111)
-        self.ax.plot(xarray[1:],yarray[1:])
-        self.ax.set_xlabel(xarray[0])
-        self.ax.set_ylabel(yarray[0])
-        self.draw()
+#     def plot(self,xarray,yarray):
+#         self.fig.clear()
+#         self.ax= self.fig.add_subplot(111)
+#         self.ax.plot(xarray[1:],yarray[1:])
+#         self.ax.set_xlabel(xarray[0])
+#         self.ax.set_ylabel(yarray[0])
+#         self.draw()
         
 
 app = QApplication(sys.argv)
