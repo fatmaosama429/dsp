@@ -9,8 +9,6 @@ from os.path import dirname, realpath,join
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow,QVBoxLayout,QAction,QFileDialog
 from PyQt5.uic import  loadUiType
-# from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-# from matplotlib.figure import Figure
 from PyQt5.QtWidgets import QMenu
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog, QPrintPreviewDialog
 from PyQt5.QtCore import QAbstractEventDispatcher, QFileInfo
