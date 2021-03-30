@@ -64,7 +64,7 @@ class mainwind(QMainWindow,From_Main):
         file_menu.addAction(printAction)
 
         printPreviewAction=QAction("print preview", self)
-        #    printPreviewAction.triggered.connect(self.printPreviewDialog)
+        #        printPreviewAction.triggered.connect(self.printPreviewDialog)
         file_menu.addAction(printPreviewAction)
         
         pdfAction=QAction(QIcon("export.png"), "Export PDF...", self)
@@ -208,7 +208,7 @@ class mainwind(QMainWindow,From_Main):
         showAction =QAction("Show All Events", self)
         view_menu.addAction(showAction)    
 
-     #       view_menu.addAction('Quit',self.close)
+        #       view_menu.addAction('Quit',self.close)
         
         # menubar  tools
         tools_menu = menuBar.addMenu('tools')
@@ -219,7 +219,7 @@ class mainwind(QMainWindow,From_Main):
         powerAction =QAction("Power Spectrum...", self)
         tools_menu.addAction(powerAction)
 
-     #   tools_menu.addAction('Quit',self.close)
+        #        tools_menu.addAction('Quit',self.close)
         
         # menubar  help
         help_menu = menuBar.addMenu('help')
@@ -233,16 +233,74 @@ class mainwind(QMainWindow,From_Main):
         self.toolBar.addAction(AddFile)
         self.toolBar.setObjectName("toolBar")
 
-        Addplay = QAction(QIcon('Scatter.png'),'Scatter',self)
+        Addplay = QAction(QIcon('play.png'),'play',self)
         Addplay.triggered.connect(self.dynamicSig)
         self.toolBar= self.addToolBar('play')
         self.toolBar.addAction(Addplay)
+        Addplay.setShortcut("Ctrl+p")
 
-        Addpause = QAction(QIcon('Scatter.png'),'pause',self)
+        Addpause = QAction(QIcon('pause.jpg'),'pause',self)
         Addpause.triggered.connect(self.pauseSignal)
         self.toolBar= self.addToolBar('pause')
         self.toolBar.addAction(Addpause)
+        Addpause.setShortcut("Ctrl+shift+p")
+
+        Addclear = QAction(QIcon('clear.jpg'),'clear',self)
+        Addclear.triggered.connect(self.clear)
+        self.toolBar= self.addToolBar('clear')
+        self.toolBar.addAction(Addclear)
+        Addclear.setShortcut("Ctrl+i")
         
+        Addzoomin = QAction(QIcon('zoomin.png'),'zoomin',self)
+        Addzoomin.triggered.connect(self.zoom_in)
+        self.toolBar= self.addToolBar('zoomin')
+        self.toolBar.addAction(Addzoomin)
+        Addzoomin.setShortcut("Ctrl+T")
+
+        Addzoomout = QAction(QIcon('zoomout.jpg'),'zoomout',self)
+        Addzoomout.triggered.connect(self.zoom_out)
+        self.toolBar= self.addToolBar('zoomout')
+        self.toolBar.addAction(Addzoomout)
+        Addzoomout.setShortcut("Ctrl+H")
+
+        AddscrollR = QAction(QIcon('arrowrjpg.jpg'),'scroll Right',self)
+        AddscrollR.triggered.connect(self.scrollR)
+        self.toolBar= self.addToolBar('scroll Right')
+        self.toolBar.addAction(AddscrollR)
+        AddscrollR.setShortcut("Ctrl+R")
+
+        AddscrollL = QAction(QIcon('arrowl.png'),'scroll left',self)
+        AddscrollL.triggered.connect(self.scrollL)
+        self.toolBar= self.addToolBar('scroll Right')
+        self.toolBar.addAction(AddscrollL)
+        Addzoomout.setShortcut("Ctrl+D")
+
+    def scrollR(self):
+        xrange, yrange = self.sc.viewRange()
+        scrollvalue = (xrange[1] - xrange[0])/10
+        self.sc.setXRange(xrange[0]+scrollvalue, xrange[1]+scrollvalue, padding=0)
+        self.sc.setYrange(yrange[0],yrange[1], padding=0)
+
+
+    def scrollL(self):
+        xrange, yrange = self.sc.viewRange()
+        scrollvalue = (xrange[1] - xrange[0])/10
+        self.sc.setXRange(xrange[0]-scrollvalue, xrange[1]-scrollvalue, padding=0)
+        self.sc.setYrange(yrange[0],yrange[1], padding=0)
+
+    def zoom_in(self):
+        xrange, yrange = self.sc.viewRange()
+        self.sc.setYRange(yrange[0]/2, yrange[1]/2, padding=0)
+        self.sc.setXRange(xrange[0]/2, xrange[1]/2, padding=0)
+
+    
+
+    def zoom_out(self):
+        xrange, yrange = self.sc.viewRange()
+        self.sc.setYRange(yrange[0]*2, yrange[1]*2, padding=0)
+        self.sc.setXRange(xrange[0]*2, xrange[1]*2, padding=0)
+    # def spectro(self):
+        # self.frequencies = np.arange(5,105,5)
 
     def printDialog(self):
         printer= QPrinter(QPrinter.HighResolution)
@@ -251,14 +309,7 @@ class mainwind(QMainWindow,From_Main):
         if dialog.exec_()== QPrinter.Accepted:
             self.graphicsview.print_(printer)
 
-        #    def printPreviewDialog(self):
-        #        printer=QPrinter(QPrinter.HighResolution)
-        #        previewDialog= QPrintPreviewDialog(printer, self)
-        #        previewDialog.paintRequested.connect(self.printPreview)
-        #        previewDialog.exec_()
 
-        #   def printPreview(self,printer):
-        #        self.graphicsview.print_(printer)
 
     def pdfExport(self):
         fn, _= QFileDialog.getSaveFileName(self, "Export PDF", None, "PDF files (.pdf);;All Files()" )
@@ -274,6 +325,9 @@ class mainwind(QMainWindow,From_Main):
 
     def Plot(self):
         self.sc.plot(self.x1[: self.l1], self.y1[: self.l1])
+        # self.sc.plot.setLabel('bottom', 'time in sec')
+        # self.sc.plot.setLabel('left', 'volt in mv')
+
         self.l1 +=10
         if self.l1 > len(self.x1):
             self.l1 = 10
@@ -286,49 +340,42 @@ class mainwind(QMainWindow,From_Main):
             df=pd.read_csv(fileName,header=None)
             # df=pd.read_csv("ECG22 CSV.csv",header=None,nrows=10000)
             self.x=np.array(df[0])
-            self.x1=self.x[1:].tolist() #list
+            # self.x1=self.x.tolist() #list
             self.y=np.array(df[1]) 
-            self.y1=self.y[1:].tolist() #list
-            self.y2=[self.y1[i] for i in range (len(self.y1))]
+            # self.y1=self.y.tolist() #list
+            # self.y2=[self.y1[i] for i in range (len(self.y1))]
             # self.z=[self.b[i] for i in range (10000)]
-            self.i = 0
-            pen = pg.mkPen(color=(255, 0, 0))
-            self.data_line =  self.sc.plot(self.x1, self.y2, pen=pen)
-                #        self.Plot()
-                    def clear(self):
-                        self.sc.clear()
-                    def dynamicSig(self):
-                        self.clear()
-                        self.timer = QtCore.QTimer()
-                        self.timer.setInterval(5)
-                        self.timer.timeout.connect(self.dynamicSig)
-                        self.timer.start()
-                        self.x1 = self.x1[1:] 
-                        self.x1.append(self.x1[-1] + 1)
+            # self.i = 0
+            xrange, yrange = self.sc.viewRange()
+            self.sc.setXRange(xrange[0]/5, xrange[1]/5, padding=0)
+            # self.sc.setYRange(yrange[0]/100, yrange[1]/100, padding=0)
+            pen = pg.mkPen(color=(50, 50, 250))
+            self.data_line =  self.sc.plot(self.x, self.y, pen=pen)
+#        self.Plot()
+    def clear(self):
+        self.sc.clear()
+    def dynamicSig(self):
+        # self.clear()
+        self.timer = QtCore.QTimer()
+        self.timer.setInterval(5)
+        self.timer.timeout.connect(self.dynamicSig)
+        self.timer.start()
+        xrange, yrange = self.sc.viewRange()
+        scrollvalue = (xrange[1] - xrange[0])/500
+        self.sc.setXRange(xrange[0]+scrollvalue, xrange[1]+scrollvalue, padding=0)
 
-                        self.y2 = self.y2[1:]
-                    
-                        self.y2.append(self.y[self.i]) 
-                        self.i = self.i + 1 
-                        self.sc.plot(self.x1[0:self.i], self.y2[0:self.i])
-                    def pauseSignal(self):
-                        self.timer.stop()
 
-                    
+        # self.x1 = self.x1[1:]
+        # self.x1.append(self.x1[-1] + 1)
 
-                # class myCanvas(FigureCanvas):
-                #     def __init__(self):
-                #         self.fig=Figure()
-                #         FigureCanvas.__init__(self,self.fig)
+        # self.y2 = self.y2[1:]
+       
+        # self.y2.append(self.y[self.i]) 
+        # self.i = self.i + 1 
+        # self.sc.plot(self.x1[0:self.i], self.y2[0:self.i])
+    def pauseSignal(self):
+        self.timer.stop()
 
-                #     def plot(self,xarray,yarray):
-                #         self.fig.clear()
-                #         self.ax= self.fig.add_subplot(111)
-                #         self.ax.plot(xarray[1:],yarray[1:])
-                #         self.ax.set_xlabel(xarray[0])
-                #         self.ax.set_ylabel(yarray[0])
-                #         self.draw()
-        
 
 app = QApplication(sys.argv)
 sheet= mainwind()
